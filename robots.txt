@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://couchpotatoes.eigen1.com/sitemap.xml

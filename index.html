@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CouchPotatoes — Open Source Engine for Digital Board & Card Games</title>
+  <meta name="description" content="CouchPotatoes is an open source game engine, UX toolkit and framework for building digital board games and card games. MIT licensed, developed in the open.">
+  <link rel="canonical" href="https://couchpotatoes.eigen1.com/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="theme-color" content="#C2502E">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://couchpotatoes.eigen1.com/">
+  <meta property="og:title" content="CouchPotatoes — Open source engine for digital board & card games">
+  <meta property="og:description" content="The game engine, UX components and frameworks to take your board or card game idea from napkin to playable.">
+  <meta property="og:site_name" content="CouchPotatoes">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@eigen_one">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    "name": "CouchPotatoes",
+    "description": "Open source game engine, UX toolkit and framework for building digital board games and card games.",
+    "url": "https://couchpotatoes.eigen1.com/",
+    "codeRepository": "https://github.com/eigenone/couchpotatoes-oss",
+    "license": "https://opensource.org/licenses/MIT",
+    "author": { "@type": "Organization", "name": "Eigen One", "url": "https://eigen1.com" }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,800&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #FBF5EA;
+      --bg-alt: #F3E8D4;
+      --surface: #FFFDF8;
+      --ink: #2A1F17;
+      --ink-soft: #5E4D3F;
+      --line: #E2D3BA;
+      --accent: #C2502E;
+      --accent-ink: #FFFFFF;
+      --felt: #2F5D4A;
+      --felt-ink: #F4EEDF;
+      --gold: #D4A82A;
+      --card: #FFFDF8;
+      --shadow: 0 1px 0 rgba(42,31,23,.06), 0 10px 30px -12px rgba(42,31,23,.25);
+      --radius: 14px;
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #17120E; --bg-alt: #201914; --surface: #241C16; --ink: #F3EADB; --ink-soft: #BFAE98;
+        --line: #3A2E24; --accent: #E2714D; --accent-ink: #1A120D; --felt: #1F3F32; --felt-ink: #EDE4D0;
+        --card: #2C231C; --shadow: 0 1px 0 rgba(0,0,0,.3), 0 12px 30px -12px rgba(0,0,0,.7);
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #17120E; --bg-alt: #201914; --surface: #241C16; --ink: #F3EADB; --ink-soft: #BFAE98;
+      --line: #3A2E24; --accent: #E2714D; --accent-ink: #1A120D; --felt: #1F3F32; --felt-ink: #EDE4D0;
+      --card: #2C231C; --shadow: 0 1px 0 rgba(0,0,0,.3), 0 12px 30px -12px rgba(0,0,0,.7);
+      color-scheme: dark;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; background: var(--bg); color: var(--ink);
+      font-family: var(--font-body); font-size: 17px; line-height: 1.6;
+      -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    }
+    a { color: inherit; }
+    img, svg { display: block; max-width: 100%; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+    @media (min-width: 720px) { .wrap { padding: 0 32px; } }
+
+    /* Nav */
+    header.nav { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-family: var(--font-display); font-weight: 800; font-size: 20px; letter-spacing: -.01em; }
+    .brand svg { width: 30px; height: 30px; }
+    .nav-links { display: flex; align-items: center; gap: 22px; list-style: none; margin: 0; padding: 0; font-size: 15px; font-weight: 500; }
+    .nav-links a { text-decoration: none; color: var(--ink-soft); }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links .hide-sm { display: none; }
+    @media (min-width: 720px) { .nav-links .hide-sm { display: inline; } }
+
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 999px; font-weight: 700; font-size: 15px; text-decoration: none; border: 1.5px solid transparent; transition: transform .15s ease, box-shadow .15s ease; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--accent); color: var(--accent-ink); box-shadow: var(--shadow); }
+    .btn-ghost { border-color: var(--line); background: var(--surface); }
+    .btn-sm { padding: 8px 14px; font-size: 14px; }
+    .btn svg { width: 18px; height: 18px; }
+
+    /* Hero */
+    .hero { padding: 56px 0 72px; }
+    .hero-grid { display: grid; gap: 48px; align-items: center; }
+    @media (min-width: 900px) { .hero-grid { grid-template-columns: 1.1fr .9fr; } .hero { padding: 88px 0 104px; } }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft); background: var(--surface); border: 1px solid var(--line); padding: 6px 12px; border-radius: 999px; }
+    .eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--felt); box-shadow: 0 0 0 3px color-mix(in srgb, var(--felt) 25%, transparent); }
+    h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(40px, 7vw, 68px); line-height: 1.02; letter-spacing: -.025em; margin: 20px 0 20px; }
+    h1 em { font-style: normal; color: var(--accent); }
+    .lede { font-size: clamp(17px, 2.2vw, 20px); color: var(--ink-soft); max-width: 36em; margin: 0 0 32px; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 28px; font-size: 14px; color: var(--ink-soft); }
+    .meta-row span::before { content: "✓"; color: var(--felt); font-weight: 700; margin-right: 6px; }
+
+    /* Hero table */
+    .table { position: relative; aspect-ratio: 1 / .85; border-radius: 28px; background:
+      radial-gradient(120% 90% at 50% 40%, color-mix(in srgb, var(--felt) 85%, #fff) 0%, var(--felt) 70%);
+      box-shadow: inset 0 0 0 10px color-mix(in srgb, var(--felt) 70%, #000), var(--shadow); overflow: hidden; }
+    .pcard { position: absolute; width: 30%; aspect-ratio: 5 / 7; background: var(--card); border-radius: 10px; box-shadow: 0 8px 20px -6px rgba(0,0,0,.45); display: grid; place-items: center; font-family: var(--font-display); font-weight: 800; color: var(--accent); font-size: clamp(22px, 4vw, 36px); transition: transform .4s cubic-bezier(.22,1,.36,1); }
+    .pcard small { position: absolute; top: 8px; left: 10px; font-size: 14px; }
+    .pcard.c1 { left: 14%; top: 18%; transform: rotate(-14deg); }
+    .pcard.c2 { left: 35%; top: 12%; transform: rotate(-2deg); color: var(--ink); }
+    .pcard.c3 { left: 56%; top: 18%; transform: rotate(11deg); }
+    .table:hover .c1 { transform: rotate(-20deg) translate(-8px, -4px); }
+    .table:hover .c3 { transform: rotate(17deg) translate(8px, -4px); }
+    .die { position: absolute; width: 13%; aspect-ratio: 1; background: #FFFDF8; border-radius: 18%; box-shadow: 0 6px 14px -4px rgba(0,0,0,.5); display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); padding: 1.6%; }
+    .die i { width: 70%; aspect-ratio: 1; border-radius: 50%; background: #2A1F17; place-self: center; }
+    .die.d1 { left: 20%; bottom: 9%; transform: rotate(12deg); }
+    .die.d2 { left: 37%; bottom: 7%; transform: rotate(-9deg); }
+    .token { position: absolute; width: 9%; aspect-ratio: 1; border-radius: 50%; box-shadow: inset 0 -4px 0 rgba(0,0,0,.25), 0 6px 12px -4px rgba(0,0,0,.5); }
+    .token.t1 { right: 22%; bottom: 18%; background: var(--gold); }
+    .token.t2 { right: 12%; bottom: 26%; background: var(--accent); }
+    .token.t3 { right: 16%; bottom: 10%; background: #5B7FC7; }
+
+    /* Sections */
+    section { padding: 72px 0; }
+    .alt { background: var(--bg-alt); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .kicker { font-family: var(--font-mono); font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin: 0 0 12px; }
+    h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(30px, 4.5vw, 44px); line-height: 1.1; letter-spacing: -.02em; margin: 0 0 16px; }
+    .section-lede { color: var(--ink-soft); max-width: 40em; margin: 0 0 40px; }
+
+    .grid { display: grid; gap: 20px; }
+    @media (min-width: 720px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 960px) { .grid-4 { grid-template-columns: repeat(4, 1fr); } }
+    @media (min-width: 600px) and (max-width: 959px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; }
+    .card h3 { font-family: var(--font-display); font-weight: 700; font-size: 22px; margin: 14px 0 8px; letter-spacing: -.01em; }
+    .card p { margin: 0; color: var(--ink-soft); font-size: 16px; }
+    .card ul { margin: 14px 0 0; padding: 0; list-style: none; font-size: 15px; color: var(--ink-soft); }
+    .card li { padding: 6px 0; border-top: 1px dashed var(--line); }
+    .icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); }
+    .icon svg { width: 24px; height: 24px; }
+    .icon.felt { background: color-mix(in srgb, var(--felt) 18%, transparent); color: var(--felt); }
+    .icon.gold { background: color-mix(in srgb, var(--gold) 22%, transparent); color: #9A7414; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .icon.felt { color: #7FC3A3; } :root:not([data-theme="light"]) .icon.gold { color: var(--gold); } }
+    :root[data-theme="dark"] .icon.felt { color: #7FC3A3; }
+    :root[data-theme="dark"] .icon.gold { color: var(--gold); }
+
+    /* Code sample */
+    .code-split { display: grid; gap: 32px; align-items: center; }
+    @media (min-width: 900px) { .code-split { grid-template-columns: .9fr 1.1fr; } }
+    pre.code { margin: 0; background: #1E1813; color: #EFE5D3; border-radius: var(--radius); padding: 22px; font-family: var(--font-mono); font-size: 13.5px; line-height: 1.7; overflow-x: auto; box-shadow: var(--shadow); border: 1px solid #3A2E24; }
+    pre.code .k { color: #E89A6F; } pre.code .s { color: #A8CF8F; } pre.code .c { color: #8C7B68; font-style: italic; } pre.code .f { color: #F2CC6B; }
+    .note { font-size: 14px; color: var(--ink-soft); margin-top: 12px; }
+
+    /* Principles */
+    .principle { display: flex; gap: 16px; align-items: flex-start; }
+    .principle .num { flex: none; font-family: var(--font-display); font-weight: 800; font-size: 28px; color: var(--accent); width: 40px; line-height: 1.1; }
+    .principle h3 { margin: 0 0 4px; font-size: 19px; font-family: var(--font-body); font-weight: 700; }
+    .principle p { margin: 0; color: var(--ink-soft); font-size: 16px; }
+
+    /* Roadmap */
+    .roadmap { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+    .roadmap li { display: flex; gap: 14px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; }
+    .pill { flex: none; font-family: var(--font-mono); font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-soft); min-width: 92px; text-align: center; }
+    .pill.now { background: var(--felt); color: var(--felt-ink); border-color: transparent; }
+    .pill.next { background: color-mix(in srgb, var(--gold) 25%, transparent); color: var(--ink); border-color: transparent; }
+
+    /* CTA band */
+    .band { background: var(--felt); color: var(--felt-ink); border-radius: 24px; padding: 44px 28px; text-align: center; }
+    @media (min-width: 720px) { .band { padding: 64px; } }
+    .band h2 { color: var(--felt-ink); }
+    .band p { color: color-mix(in srgb, var(--felt-ink) 80%, transparent); max-width: 34em; margin: 0 auto 28px; }
+    .band .btn-ghost { background: transparent; border-color: color-mix(in srgb, var(--felt-ink) 40%, transparent); color: var(--felt-ink); }
+    .band .cta-row { justify-content: center; }
+
+    footer { padding: 40px 0 48px; font-size: 14px; color: var(--ink-soft); }
+    .foot { display: flex; flex-wrap: wrap; gap: 16px 32px; justify-content: space-between; align-items: center; border-top: 1px solid var(--line); padding-top: 28px; }
+    .foot ul { display: flex; flex-wrap: wrap; gap: 8px 22px; list-style: none; margin: 0; padding: 0; }
+    .foot a { text-decoration: none; }
+    .foot a:hover { color: var(--ink); text-decoration: underline; }
+
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+  </style>
+</head>
+<body>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="/" aria-label="CouchPotatoes home">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy="34" rx="24" ry="19" transform="rotate(-18 32 34)" fill="#C98A4B"/><circle cx="22" cy="30" r="2.4" fill="#7A4E26"/><circle cx="38" cy="26" r="2" fill="#7A4E26"/><circle cx="34" cy="42" r="2.6" fill="#7A4E26"/><circle cx="45" cy="36" r="1.8" fill="#7A4E26"/></svg>
+        CouchPotatoes
+      </a>
+      <ul class="nav-links">
+        <li class="hide-sm"><a href="#what">What's inside</a></li>
+        <li class="hide-sm"><a href="#how">How we build</a></li>
+        <li class="hide-sm"><a href="#contribute">Contribute</a></li>
+        <li><a class="btn btn-ghost btn-sm" href="https://github.com/eigenone/couchpotatoes-oss">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="eyebrow"><span class="dot"></span>Open source · MIT licensed</span>
+          <h1>Build the board game <em>you</em> want to play.</h1>
+          <p class="lede">CouchPotatoes is an open source game engine, UX toolkit and framework for digital board games and card games. We handle the turns, decks, dice and lobbies, so you can focus on the idea that makes your game worth playing.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="https://github.com/eigenone/couchpotatoes-oss">View on GitHub →</a>
+            <a class="btn btn-ghost" href="#contribute">Get involved</a>
+          </div>
+          <div class="meta-row">
+            <span>Free forever</span>
+            <span>Community-driven</span>
+            <span>Built in the open</span>
+          </div>
+        </div>
+        <div class="table" role="img" aria-label="Illustration of a game table with playing cards, dice and tokens">
+          <div class="pcard c1"><small>A</small>♥</div>
+          <div class="pcard c2"><small>K</small>♠</div>
+          <div class="pcard c3"><small>7</small>♦</div>
+          <div class="die d1"><i></i><b></b><b></b><b></b><i></i><b></b><b></b><b></b><i></i></div>
+          <div class="die d2"><i></i><b></b><i></i><b></b><b></b><b></b><i></i><b></b><i></i></div>
+          <div class="token t1"></div><div class="token t2"></div><div class="token t3"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="what" class="alt">
+      <div class="wrap">
+        <p class="kicker">What's inside</p>
+        <h2>Everything under the table, so you can focus on the game.</h2>
+        <p class="section-lede">Most digital tabletop games rebuild the same groundwork: state, rules, turns, shuffling, syncing players and a UI that feels good in the hand. CouchPotatoes packages that groundwork into pieces you can pick and choose.</p>
+        <div class="grid grid-3">
+          <div class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+            <h3>Game engine</h3>
+            <p>The rules brain of your game: deterministic, testable and easy to reason about.</p>
+            <ul><li>Game state, turns &amp; phases</li><li>Rules validation &amp; legal moves</li><li>Seeded randomness for dice &amp; shuffles</li></ul>
+          </div>
+          <div class="card">
+            <div class="icon felt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="12" height="16" rx="2"/><path d="M15 6.5l4.2 1.1a2 2 0 0 1 1.4 2.45l-2.6 9.7a2 2 0 0 1-2.45 1.4L12 20.3"/></svg></div>
+            <h3>UX components</h3>
+            <p>Reusable, accessible building blocks that make a game feel great to play.</p>
+            <ul><li>Boards, cards, hands &amp; decks</li><li>Tokens, timers &amp; score tracking</li><li>Lobbies, invites &amp; game flow</li></ul>
+          </div>
+          <div class="card">
+            <div class="icon gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l9 5-9 5-9-5 9-5z"/><path d="M3 12l9 5 9-5"/><path d="M3 17l9 5 9-5"/></svg></div>
+            <h3>Frameworks</h3>
+            <p>Opinionated patterns and tooling that take you from prototype to playable.</p>
+            <ul><li>Project structure &amp; templates</li><li>Rule testing &amp; simulation</li><li>Local and online multiplayer</li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap code-split">
+        <div>
+          <p class="kicker">Idea to prototype</p>
+          <h2>Describe your rules. Play tonight.</h2>
+          <p class="section-lede" style="margin-bottom:0">Define how your game works, and CouchPotatoes handles turn order, legal moves, shuffling and keeping every player in sync. Swap in our components or bring your own UI.</p>
+          <p class="note">Illustrative API. The engine is being designed in the open, so shapes may change. Come help decide.</p>
+        </div>
+<pre class="code"><code><span class="k">import</span> { defineGame, deck } <span class="k">from</span> <span class="s">'@couchpotatoes/engine'</span>
+
+<span class="k">export default</span> <span class="f">defineGame</span>({
+  name: <span class="s">'High Card'</span>,
+  players: { min: <span class="s">2</span>, max: <span class="s">6</span> },
+
+  <span class="f">setup</span>: ({ players, random }) =&gt; ({
+    deck: random.<span class="f">shuffle</span>(deck.<span class="f">standard52</span>()),
+    hands: players.<span class="f">map</span>(() =&gt; []),
+  }),
+
+  moves: {
+    <span class="f">draw</span>: ({ state, player }) =&gt; {
+      state.hands[player].<span class="f">push</span>(state.deck.<span class="f">pop</span>())
+    },
+  },
+
+  <span class="c">// Turn order, validation and sync are handled for you</span>
+  turn: { order: <span class="s">'clockwise'</span>, movesPerTurn: <span class="s">1</span> },
+})</code></pre>
+      </div>
+    </section>
+
+    <section class="alt">
+      <div class="wrap">
+        <p class="kicker">Who it's for</p>
+        <h2>Made for the people who love the table.</h2>
+        <div class="grid grid-3" style="margin-top:32px">
+          <div class="card"><h3 style="margin-top:0">Game designers</h3><p>Prototype and playtest digital versions of your designs without waiting on a full engineering team.</p></div>
+          <div class="card"><h3 style="margin-top:0">Developers</h3><p>Ship board and card games without reinventing state management, networking and UI for the hundredth time.</p></div>
+          <div class="card"><h3 style="margin-top:0">Players &amp; hobbyists</h3><p>Tinker with, mod and contribute to the games you love, and learn how they work under the hood.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="wrap">
+        <p class="kicker">How we build</p>
+        <h2>Developed in the open, with the community.</h2>
+        <p class="section-lede">CouchPotatoes is a community project. Planning, design and code all happen on GitHub where anyone can follow along and pitch in.</p>
+        <div class="grid grid-2" style="gap:32px 48px">
+          <div class="principle"><div class="num">01</div><div><h3>Public roadmap &amp; discussions</h3><p>Design proposals, feature requests and decisions happen in GitHub Issues and Discussions, not behind closed doors.</p></div></div>
+          <div class="principle"><div class="num">02</div><div><h3>Community-driven</h3><p>Anyone can propose ideas, report bugs, or contribute code, art, docs and example games.</p></div></div>
+          <div class="principle"><div class="num">03</div><div><h3>Small, reviewable changes</h3><p>Work lands through pull requests reviewed by maintainers and the community.</p></div></div>
+          <div class="principle"><div class="num">04</div><div><h3>Modular by design</h3><p>The engine, UX and frameworks stay loosely coupled. Adopt only the pieces you need.</p></div></div>
+          <div class="principle"><div class="num">05</div><div><h3>Free and MIT licensed</h3><p>Use it for hobby projects, game jams, classrooms or commercial games. No strings attached.</p></div></div>
+          <div class="principle"><div class="num">06</div><div><h3>Original games only</h3><p>Our examples showcase original designs and public-domain classics, and we respect the IP of existing games.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="alt">
+      <div class="wrap">
+        <p class="kicker">Where we are</p>
+        <h2>Early days. Great time to join.</h2>
+        <p class="section-lede">The architecture and first components are taking shape now. Contributors joining today get to shape the direction of the project.</p>
+        <ul class="roadmap">
+          <li><span class="pill now">Now</span>Core engine design: state model, turns &amp; phases, moves and seeded randomness</li>
+          <li><span class="pill next">Next</span>First UX components: cards, hands, decks and a basic board</li>
+          <li><span class="pill next">Next</span>Starter templates and an example card game</li>
+          <li><span class="pill">Later</span>Online multiplayer, lobbies and matchmaking</li>
+          <li><span class="pill">Later</span>Rule simulation, bots and playtesting tools</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="contribute">
+      <div class="wrap">
+        <div class="band">
+          <p class="kicker" style="color:var(--gold)">Pull up a chair</p>
+          <h2>Help build CouchPotatoes.</h2>
+          <p>Code, game design feedback, playtesting, documentation, art: every contribution makes the table bigger. Start with an issue, open a discussion, or send a pull request.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="https://github.com/eigenone/couchpotatoes-oss">Star &amp; fork on GitHub</a>
+            <a class="btn btn-ghost" href="https://github.com/eigenone/couchpotatoes-oss/issues">Browse issues</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <span>© 2026 CouchPotatoes contributors · An open source project by <a href="https://eigen1.com">Eigen One</a></span>
+      <ul>
+        <li><a href="https://github.com/eigenone/couchpotatoes-oss">GitHub</a></li>
+        <li><a href="https://github.com/eigenone/couchpotatoes-oss/blob/main/LICENSE">MIT License</a></li>
+        <li><a href="https://x.com/eigen_one">@eigen_one</a></li>
+      </ul>
+    </div>
+  </footer>
+
+</body>
+</html>
