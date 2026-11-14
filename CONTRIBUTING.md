@@ -16,6 +16,19 @@ Thanks for your interest in CouchPotatoes! We're building an open source game en
 3. Write a clear description of **what** you changed and **why**. Link any related issue.
 4. Be responsive to review feedback. Maintainers and community members review every pull request.
 
+## Local development
+
+You'll need Node.js 22 or newer.
+
+```sh
+npm install
+npm test            # run the test suite
+npm run typecheck   # type-check source and tests
+npm run build       # compile packages to dist/
+```
+
+The code lives in `packages/`. Today that's just [`@couchpotatoes/engine`](packages/engine). CI runs type checks, the build and tests on every pull request.
+
 ## Project website
 
 The site at https://couchpotatoes.eigen1.com is the static `index.html` in this repo (no build step). To preview locally:

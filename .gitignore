@@ -2,3 +2,6 @@
 .playwright-mcp/
 thinking/
 .og/
+node_modules/
+dist/
+*.tsbuildinfo
