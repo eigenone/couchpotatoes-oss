@@ -33,6 +33,12 @@ CouchPotatoes is developed in the open:
 - **Modular by design**: the engine, UX components and frameworks are kept loosely coupled so you can adopt only the pieces you need.
 - **Original games only**: our examples and templates showcase original designs and public-domain classics, and we respect the intellectual property of existing games.
 
+## Packages
+
+| Package | Description | Status |
+|---|---|---|
+| [`@couchpotatoes/engine`](packages/engine) | Game state, turns, moves, validation and seeded randomness | Early skeleton |
+
 ## Project status
 
 🚧 CouchPotatoes is in its early stages. The architecture and first components are being shaped now, which makes this a great time to get involved and influence the direction of the project.
