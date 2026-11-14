@@ -37,6 +37,8 @@ CouchPotatoes is developed in the open:
 
 🚧 CouchPotatoes is in its early stages. The architecture and first components are being shaped now, which makes this a great time to get involved and influence the direction of the project.
 
+👉 See the **[Roadmap](https://github.com/eigenone/couchpotatoes-oss/discussions/11)** and the open **[RFCs](https://github.com/eigenone/couchpotatoes-oss/issues?q=is%3Aopen+label%3Adesign)**. Looking for a place to start? Try a **[good first issue](https://github.com/eigenone/couchpotatoes-oss/issues?q=is%3Aopen+label%3A%22good+first+issue%22)**.
+
 ## Contributing
 
 We welcome contributions of all kinds:

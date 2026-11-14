@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💡 Ideas and questions
+    url: https://github.com/eigenone/couchpotatoes-oss/discussions
+    about: Have an idea or a question? Start a discussion.
+  - name: 🗺️ Roadmap
+    url: https://github.com/eigenone/couchpotatoes-oss/discussions/11
+    about: See what we're working on now and what's next.

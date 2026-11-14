@@ -1,0 +1,26 @@
+name: ✨ Feature request
+description: Suggest a feature for the engine, UX components, frameworks or website
+labels: [enhancement]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options: [Engine, UX components, Framework / tooling, Website, Docs, Not sure]
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: What are you trying to build, and what's getting in the way?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
