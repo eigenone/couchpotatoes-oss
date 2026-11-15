@@ -1,6 +1,6 @@
 {
   "name": "@couchpotatoes/engine",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Core game engine for CouchPotatoes: state, turns, moves and seeded randomness",
   "license": "MIT",
   "type": "module",
