@@ -2,6 +2,8 @@
 
 **An open source engine, UX toolkit and framework for building digital board games and card games.**
 
+[![CI](https://github.com/eigenone/couchpotatoes-oss/actions/workflows/ci.yml/badge.svg)](https://github.com/eigenone/couchpotatoes-oss/actions/workflows/ci.yml) [![Release](https://img.shields.io/github/v/release/eigenone/couchpotatoes-oss?include_prereleases)](https://github.com/eigenone/couchpotatoes-oss/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 🌐 **Website:** https://couchpotatoes.eigen1.com
 
 CouchPotatoes is an open source project that gives back to the community of gamers and developers who want to bring new board game and card game ideas to life. We provide the underlying game engine, user experience components and frameworks so you can spend your time on what makes your game unique, not on rebuilding turn order, card decks and lobby screens from scratch.
